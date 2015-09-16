@@ -1,0 +1,7 @@
+nphot = 5000000
+scattering_mode_max = 2
+modified_random_walk = 1
+debug_write_stats = 1
+istar_sphere = 1
+camera_min_drr = 0.30
+iseed = 909044
