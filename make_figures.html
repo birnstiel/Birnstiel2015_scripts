@@ -197,7 +197,7 @@ Astrophysical Journal Letters, 2015</p>
 <div class="prompt input_prompt">In&nbsp;[1]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="kn">import</span> <span class="nn">glob</span><span class="o">,</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">cPickle</span><span class="o">,</span> <span class="nn">aux_functions</span><span class="o">,</span> <span class="nn">fig1</span>
+<div class=" highlight hl-ipython2"><pre><span class="kn">import</span> <span class="nn">glob</span><span class="o">,</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">aux_functions</span><span class="o">,</span> <span class="nn">fig1</span><span class="o">,</span> <span class="nn">h5py</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span>             <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib</span>        <span class="kn">as</span> <span class="nn">mpl</span>
@@ -205,7 +205,7 @@ Astrophysical Journal Letters, 2015</p>
 
 <span class="kn">from</span> <span class="nn">matplotlib</span>        <span class="kn">import</span> <span class="n">ticker</span><span class="p">,</span> <span class="n">gridspec</span>
 <span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="kn">import</span> <span class="n">LogNorm</span>
-<span class="kn">from</span> <span class="nn">aux_functions</span>     <span class="kn">import</span> <span class="n">year</span><span class="p">,</span> <span class="n">AU</span><span class="p">,</span> <span class="n">Grav</span><span class="p">,</span> <span class="n">k_b</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">m_p</span>
+<span class="kn">from</span> <span class="nn">aux_functions</span>     <span class="kn">import</span> <span class="n">AU</span><span class="p">,</span> <span class="n">Grav</span><span class="p">,</span> <span class="n">k_b</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">m_p</span>
     
 <span class="kn">import</span> <span class="nn">distribution_reconstruction</span>
 
@@ -251,26 +251,24 @@ Astrophysical Journal Letters, 2015</p>
 <div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;data.pickle&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fid</span><span class="p">:</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">cPickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fid</span><span class="p">)</span>
-
-<span class="n">sim_file</span>  <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;sim_file&#39;</span><span class="p">]</span>  <span class="c"># Name of the simulation file</span>
-<span class="n">radmc_dir</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;radmc_dir&#39;</span><span class="p">]</span> <span class="c"># Name of the RADMC-3D setup</span>
-<span class="n">time</span>      <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;time&#39;</span><span class="p">]</span>      <span class="c"># Time of the snapshot                 [s]</span>
-<span class="n">sig_da</span>    <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;sig_da&#39;</span><span class="p">]</span>    <span class="c"># Dust surface densities \Sigma_d(r,a) [g cm^-2]</span>
-<span class="n">sig_g</span>     <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;sig_g&#39;</span><span class="p">]</span>     <span class="c"># Gas  surface densities \Sigma_g(r)   [g cm^-2]</span>
-<span class="n">M_star</span>    <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;M_star&#39;</span><span class="p">]</span>    <span class="c"># Mass of central star                 [g]</span>
-<span class="n">v_gas</span>     <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;v_gas&#39;</span><span class="p">]</span>     <span class="c"># Gas radial velocities                [cm s^-1]</span>
-<span class="n">v_dust</span>    <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;v_dust&#39;</span><span class="p">]</span>    <span class="c"># Dust radial velocities v_d(r,a)      [cm s^-1]</span>
-<span class="n">rho_s</span>     <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;rho_s&#39;</span><span class="p">]</span>     <span class="c"># Material density of the grains       [g cm^-3]</span>
-<span class="n">r</span>         <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;r&#39;</span><span class="p">]</span>         <span class="c"># Radial grid                          [cm]</span>
-<span class="n">a</span>         <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">]</span>         <span class="c"># Grain size grid                      [cm]</span>
-<span class="n">T</span>         <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;T&#39;</span><span class="p">]</span>         <span class="c"># Temperature profile in simulation    [K]</span>
-<span class="n">v_f</span>       <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;v_f&#39;</span><span class="p">]</span>       <span class="c"># Fragmentation threshold velocity     [cm s^-1]</span>
-<span class="n">alpha</span>     <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;alpha&#39;</span><span class="p">]</span>     <span class="c"># Turbulence parameter \alpha(r)       [-]</span>
-<span class="n">gamma</span>     <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;gamma&#39;</span><span class="p">]</span>     <span class="c"># Radial pressure exponent dlnP/dlnr   [-]</span>
-<span class="n">lambdas</span>   <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;lambdas&#39;</span><span class="p">]</span>   <span class="c"># Wavlengths of the images/profiles    [cm]</span>
-<span class="n">a_0</span>       <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;a_0&#39;</span><span class="p">]</span>       <span class="c"># Initial maximum particle size        [cm]</span>
+<div class=" highlight hl-ipython2"><pre><span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="s">&#39;data.hdf5&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fid</span><span class="p">:</span>
+    <span class="n">sim_file</span>  <span class="o">=</span> <span class="n">fid</span><span class="p">[</span><span class="s">&#39;sim_file&#39;</span><span class="p">][()]</span>  <span class="c"># Name of the simulation file</span>
+    <span class="n">radmc_dir</span> <span class="o">=</span> <span class="n">fid</span><span class="p">[</span><span class="s">&#39;radmc_dir&#39;</span><span class="p">][()]</span> <span class="c"># Name of the RADMC-3D setup</span>
+    <span class="n">time</span>      <span class="o">=</span> <span class="n">fid</span><span class="p">[</span><span class="s">&#39;time&#39;</span><span class="p">][()]</span>      <span class="c"># Time of the snapshot                 [s]</span>
+    <span class="n">sig_da</span>    <span class="o">=</span> <span class="n">fid</span><span class="p">[</span><span class="s">&#39;sig_da&#39;</span><span class="p">][()]</span>    <span class="c"># Dust surface densities \Sigma_d(r,a) [g cm^-2]</span>
+    <span class="n">sig_g</span>     <span class="o">=</span> <span class="n">fid</span><span class="p">[</span><span class="s">&#39;sig_g&#39;</span><span class="p">][()]</span>     <span class="c"># Gas  surface densities \Sigma_g(r)   [g cm^-2]</span>
+    <span class="n">M_star</span>    <span class="o">=</span> <span class="n">fid</span><span class="p">[</span><span class="s">&#39;M_star&#39;</span><span class="p">][()]</span>    <span class="c"># Mass of central star                 [g]</span>
+    <span class="n">v_gas</span>     <span class="o">=</span> <span class="n">fid</span><span class="p">[</span><span class="s">&#39;v_gas&#39;</span><span class="p">][()]</span>     <span class="c"># Gas radial velocities                [cm s^-1]</span>
+    <span class="n">v_dust</span>    <span class="o">=</span> <span class="n">fid</span><span class="p">[</span><span class="s">&#39;v_dust&#39;</span><span class="p">][()]</span>    <span class="c"># Dust radial velocities v_d(r,a)      [cm s^-1]</span>
+    <span class="n">rho_s</span>     <span class="o">=</span> <span class="n">fid</span><span class="p">[</span><span class="s">&#39;rho_s&#39;</span><span class="p">][()]</span>     <span class="c"># Material density of the grains       [g cm^-3]</span>
+    <span class="n">r</span>         <span class="o">=</span> <span class="n">fid</span><span class="p">[</span><span class="s">&#39;r&#39;</span><span class="p">][()]</span>         <span class="c"># Radial grid                          [cm]</span>
+    <span class="n">a</span>         <span class="o">=</span> <span class="n">fid</span><span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">][()]</span>         <span class="c"># Grain size grid                      [cm]</span>
+    <span class="n">T</span>         <span class="o">=</span> <span class="n">fid</span><span class="p">[</span><span class="s">&#39;T&#39;</span><span class="p">][()]</span>         <span class="c"># Temperature profile in simulation    [K]</span>
+    <span class="n">v_f</span>       <span class="o">=</span> <span class="n">fid</span><span class="p">[</span><span class="s">&#39;v_f&#39;</span><span class="p">][()]</span>       <span class="c"># Fragmentation threshold velocity     [cm s^-1]</span>
+    <span class="n">alpha</span>     <span class="o">=</span> <span class="n">fid</span><span class="p">[</span><span class="s">&#39;alpha&#39;</span><span class="p">][()]</span>     <span class="c"># Turbulence parameter \alpha(r)       [-]</span>
+    <span class="n">gamma</span>     <span class="o">=</span> <span class="n">fid</span><span class="p">[</span><span class="s">&#39;gamma&#39;</span><span class="p">][()]</span>     <span class="c"># Radial pressure exponent dlnP/dlnr   [-]</span>
+    <span class="n">lambdas</span>   <span class="o">=</span> <span class="n">fid</span><span class="p">[</span><span class="s">&#39;lambdas&#39;</span><span class="p">][()]</span>   <span class="c"># Wavlengths of the images/profiles    [cm]</span>
+    <span class="n">a_0</span>       <span class="o">=</span> <span class="n">fid</span><span class="p">[</span><span class="s">&#39;a_0&#39;</span><span class="p">][()]</span>       <span class="c"># Initial maximum particle size        [cm]</span>
 <span class="c">#</span>
 <span class="c"># calculate derived quantities</span>
 <span class="c">#</span>
