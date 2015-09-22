@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
-from matplotlib.pyplot import gca,figure
+from matplotlib.pyplot import gca,figure,tight_layout
 from numpy import logspace,ones,abs,log10,where
 from uTILities import better_plots
 
@@ -56,7 +56,7 @@ def main():
     better_plots(fs=20,sans=False)
     #cols = rcParams['axes.color_cycle']
     cols = ['#31a354','#e6550d','#08519c']
-    f    = figure(tight_layout=True)
+    f    = figure()
     ax   = gca()
     
     mask = r<=rf_out
@@ -81,14 +81,14 @@ def main():
     #
     mask = (r>=rf) & (r<=10.**((log10(rf)+3*log10(rf_out))/4.))
     ax.fill_between(r,ad/a_width,y2=ax.get_ylim()[0]*ones(len(r)),where=mask,alpha=0.7,color=cols[2])
-    roman_II=ax.annotate('II',xy=(10.**log10(r[where(mask)[0][[0,-1]]]).mean(),4e-4),xycoords='data',color='k',horizontalalignment='center')
+    ax.annotate('II',xy=(10.**log10(r[where(mask)[0][[0,-1]]]).mean(),4e-4),xycoords='data',color='k',horizontalalignment='center')
     #
     # depleted region
     #
     mask = r>=10.**((log10(rf)+3*log10(rf_out))/4.)
     mask[where(mask==False)[0][-1]] = True # this is needed to avoid gaps
     ax.fill_between(r,ad/a_width,y2=ax.get_ylim()[0]*ones(len(r)),where=mask,alpha=0.7,color='0.5')
-    roman_IV=ax.annotate('IV',xy=(2*r[where(mask)[0][0]],2e-4),xycoords='data',color='k',horizontalalignment='center')
+    ax.annotate('IV',xy=(2*r[where(mask)[0][0]],2e-4),xycoords='data',color='k',horizontalalignment='center')
     #
     # a_f annotation
     #
@@ -107,20 +107,20 @@ def main():
     # fragmentation arrow down
     #
     opt = dict(color=cols[1],arrowstyle = 'simple,head_width=.75,head_length=.75',connectionstyle = 'arc3,rad=0')
-    a=gca().annotate('',xy=(r[i],1e-3),xycoords='data',xytext =(r[i],af[i]),textcoords = 'data',arrowprops=opt,size=20)
-    roman_I=ax.annotate('I',xy=(r[i]*1.3,10.**(log10([af[i],1e-3]).mean())),xycoords='data',color='k',horizontalalignment='center')
+    gca().annotate('',xy=(r[i],1e-3),xycoords='data',xytext =(r[i],af[i]),textcoords = 'data',arrowprops=opt,size=20)
+    ax.annotate('I',xy=(r[i]*1.3,10.**(log10([af[i],1e-3]).mean())),xycoords='data',color='k',horizontalalignment='center')
     #
     # outward diffusion arrow
     #
     opt['color']=cols[2]
-    a=gca().annotate('',xy=(r_arrow*rf,1e-3),xycoords='data',xytext =(rf,1e-3),textcoords = 'data',arrowprops=opt,size=20)
+    gca().annotate('',xy=(r_arrow*rf,1e-3),xycoords='data',xytext =(rf,1e-3),textcoords = 'data',arrowprops=opt,size=20)
     #
     # inward diffusion arrow
     #
     i = abs(r-10.**((log10(rf)+2*log10(r[-1]))/3.)).argmin()
     opt['color']=cols[0]
-    a=gca().annotate('',xy=(r[i]/r_arrow,ad[i]),xycoords='data',xytext =(r[i],ad[i]),textcoords = 'data',arrowprops=opt,size=20)
-    roman_III=ax.annotate('III',xy=(r[i]/r_arrow*2,ad[i]/2.5),xycoords='data',color='k')
+    gca().annotate('',xy=(r[i]/r_arrow,ad[i]),xycoords='data',xytext =(r[i],ad[i]),textcoords = 'data',arrowprops=opt,size=20)
+    ax.annotate('III',xy=(r[i]/r_arrow*2,ad[i]/2.5),xycoords='data',color='k')
     #
     # other styling
     #
@@ -134,6 +134,7 @@ def main():
     #
     # save and show figure
     #
+    tight_layout()
     f.savefig('fig1.pdf')
     return f
     

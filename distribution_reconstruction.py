@@ -1,4 +1,5 @@
 import numpy as np
+import warnings
 from aux_functions import dlydlx
 from scipy.optimize import fsolve
 #from scipy.interpolate import interp1d
@@ -33,7 +34,9 @@ def reconstruct_size_distribution(r,a,t,sig_g,sig_d,alpha,rho_s,T,M_star,v_f,a_0
     # time dependent growth 
     #
     t_grow = sig_g/(om*sig_d)
-    a_grow = a_0*np.exp(t/t_grow)
+    with warnings.catch_warnings():
+        warnings.filterwarnings('ignore', r'overflow encountered in exp')
+        a_grow = a_0*np.exp(t/t_grow)
     #
     # the minimum of all of those
     #
