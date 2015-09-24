@@ -2,7 +2,7 @@
 # coding: utf-8
 from matplotlib.pyplot import gca,figure,tight_layout
 from numpy import logspace,ones,abs,log10,where
-from uTILities import better_plots
+from aux_functions import better_plots
 
 def mynote(x,y,dx,dy,text,c='k',ls='-',lw=1,align='tc',fontdict={},offset=0.0):
     gca().plot([x,x+dx],[y,y+dy],ls=ls,lw=lw,c=c)
