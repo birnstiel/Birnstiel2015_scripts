@@ -17,4 +17,18 @@ The `fits` images can also be directly downloaded below:
 - [Image at 1.65 µm (~33 MB)](https://raw.githubusercontent.com/birnstiel/Birnstiel2015_scripts/master/radmc_data/data_disklifetime_mstar07_mratio1_rc200_vf10_alpha3_static_243_1e%2B06/paperimage_1.65micron.fits)
 - [Image at 1.3 mm (~33 MB)](https://raw.githubusercontent.com/birnstiel/Birnstiel2015_scripts/master/radmc_data/data_disklifetime_mstar07_mratio1_rc200_vf10_alpha3_static_243_1e%2B06/paperimage_1300micron.fits)
 
+## File Descriptions
+
+| Name | Description |
+| -----|-----|
+| `make_figures.ipynb`              | the ipython notebook to create the figures |
+| `make_figures.html`               | a html rendered version of the ipython notebook | 
+| `Readme.md`                       | description of the repository
+| `aux_functions.py`                | constants and auxiliary functions for plotting or image processing |
+| `data.hdf5`                       | dust simulation parameters and results |
+| `radmc_data/`                     | folder containing the `RADMC-3D` setup and images |
+| `distribution_reconstruction.py`  | function to reconstruct the size distribution according to the paper |
+| `fig1.py`                         | plotting function to create Figure 1
+| `fig*.pdf`                        | resulting figures used in the paper |
+
 [![astropy](http://img.shields.io/badge/powered%20by-AstroPy-orange.svg?style=flat)](http://www.astropy.org/)
