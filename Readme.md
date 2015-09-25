@@ -1,5 +1,8 @@
 # Data and Plotting Scripts for Birnstiel et al. 2015
 
+[![DOI](https://zenodo.org/badge/1015/birnstiel/Birnstiel2015_scripts.svg)](https://zenodo.org/badge/latestdoi/1015/birnstiel/Birnstiel2015_scripts) [![astropy](http://img.shields.io/badge/powered%20by-AstroPy-orange.svg?style=flat)](http://www.astropy.org/) 
+
+
 ## General
 
 This script loads the data and (re-)creates the figures for the paper
@@ -28,8 +31,6 @@ The `fits` images can also be directly downloaded below:
 
 - [Image at 1.65 µm (~33 MB)](https://raw.githubusercontent.com/birnstiel/Birnstiel2015_scripts/master/radmc_data/data_disklifetime_mstar07_mratio1_rc200_vf10_alpha3_static_243_1e%2B06/paperimage_1.65micron.fits)
 - [Image at 1.3 mm (~33 MB)](https://raw.githubusercontent.com/birnstiel/Birnstiel2015_scripts/master/radmc_data/data_disklifetime_mstar07_mratio1_rc200_vf10_alpha3_static_243_1e%2B06/paperimage_1300micron.fits)
-
-[![DOI](https://zenodo.org/badge/1015/birnstiel/Birnstiel2015_scripts.svg)](https://zenodo.org/badge/latestdoi/1015/birnstiel/Birnstiel2015_scripts) [![astropy](http://img.shields.io/badge/powered%20by-AstroPy-orange.svg?style=flat)](http://www.astropy.org/) 
 
 ## File Descriptions
 
