@@ -58,6 +58,7 @@ def main():
     cols = ['#31a354','#e6550d','#08519c']
     f    = figure()
     ax   = gca()
+    ax.set_axis_bgcolor('none')
     
     mask = r<=rf_out
     ax.loglog(r[mask],af[mask],lw=5,c=cols[1])
@@ -135,7 +136,7 @@ def main():
     # save and show figure
     #
     tight_layout()
-    f.savefig('fig1.pdf')
+    f.savefig('fig1.pdf',facecolor='none')
     return f
     
 if __name__=='__main__':
