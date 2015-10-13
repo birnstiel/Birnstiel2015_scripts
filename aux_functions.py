@@ -501,9 +501,9 @@ def readimage(ext=None,filename=None):
             'x':x,'y':y,'lamb':lamb,'radian':radian,'stokes':stokes}            
     
 def better_plots(back='w',front='k',fs=15,cmap='spectral',lw=1,sans=False,\
-                 usetex=False,brewer=True):
+    usetex=False,brewer=True):
     """
-    Changes matplotlib default parameters to get an improved look.
+    set matplotlib parameters to get an improved look
     
     Keywords:
     ---------
@@ -582,12 +582,15 @@ def better_plots(back='w',front='k',fs=15,cmap='spectral',lw=1,sans=False,\
     #
     # make tex and non-tex text look similar
     #
-    if sans:
-        rcParams['mathtext.fontset'] = 'custom'
-        rcParams['font.family'] = 'sans-serif'
-        rcParams['mathtext.rm'] = 'Bitstream Vera Sans'
-        rcParams['mathtext.it'] = 'Bitstream Vera Sans:italic'
-        rcParams['mathtext.bf'] = 'Bitstream Vera Sans:bold'
+    if sans > 0:
+        if sans==1:
+            rcParams['mathtext.fontset']='stixsans'
+        elif sans==2:
+            rcParams['mathtext.fontset'] = 'custom'
+            rcParams['font.family'] = 'sans-serif'
+            rcParams['mathtext.rm'] = 'Bitstream Vera Sans'
+            rcParams['mathtext.it'] = 'Bitstream Vera Sans:italic'
+            rcParams['mathtext.bf'] = 'Bitstream Vera Sans:bold'
     else:
         rcParams['mathtext.fontset'] = 'stix'
         rcParams['font.family']      = 'STIXGeneral'
