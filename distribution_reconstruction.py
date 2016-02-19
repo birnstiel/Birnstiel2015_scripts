@@ -68,8 +68,7 @@ def reconstruct_size_distribution(r,a,t,sig_g,sig_d,alpha,rho_s,T,M_star,v_f,a_0
     """
     import warnings
     import numpy as np
-    from aux_functions import dlydlx, k_b, mu, m_p, Grav, pi, sig_h2
-    from uTILities import trace_line_though_grid
+    from aux_functions import dlydlx, k_b, mu, m_p, Grav, pi, sig_h2, trace_line_though_grid
     from scipy.integrate import cumtrapz
     
     if fix_pd is not None: print('WARNING: fixing the inward diffusion slope')    

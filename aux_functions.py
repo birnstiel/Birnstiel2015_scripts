@@ -1,10 +1,7 @@
 import numpy as np
-import re, sys
 import scipy.constants as sc
-import matplotlib as mpl
 import matplotlib.pyplot as plt
 
-from astropy.io      import fits
 from IPython.display import HTML
 
 pi           = np.pi;                   # PI
@@ -501,9 +498,9 @@ def readimage(ext=None,filename=None):
             'x':x,'y':y,'lamb':lamb,'radian':radian,'stokes':stokes}            
     
 def better_plots(back='w',front='k',fs=15,cmap='spectral',lw=1,sans=False,\
-    usetex=False,brewer=True):
+                 usetex=False,brewer=True):
     """
-    set matplotlib parameters to get an improved look
+    Changes matplotlib default parameters to get an improved look.
     
     Keywords:
     ---------
@@ -614,3 +611,88 @@ def better_plots(back='w',front='k',fs=15,cmap='spectral',lw=1,sans=False,\
                          'monospace':'Computer Modern Typewriter'})
     else:
         rcParams['text.latex.preamble']         = ['']
+        
+def trace_line_though_grid(xi,yi,f,x=None,y=None):
+    """
+    Returns the cell indices through which the curve moves
+
+    """
+    if x is None: x=0.5*(xi[1:]+xi[:-1])
+    if y is None: y=0.5*(yi[1:]+yi[:-1])
+    
+    def fill_cells(x,y,yi,ixstart,iystart,yend):
+        """
+        Takes an index, returns, all cells from (including) this index
+        up until the last cell that includes the value yend (towards yend)
+        
+        """
+        iyend     = np.searchsorted(yi,yend)-1
+        direction = int(np.sign(yend-y[iystart]))
+        return [(ixstart,iy) for iy in range(iystart,min(max(0,iyend),len(y)-1)+direction,direction)]
+    #
+    # begin function
+    #
+    fx = f(x)
+    result = set()
+    #
+    # find first cell center where the function value is on the grid
+    #
+    mask = np.where((fx<=yi[-1]) & (fx>=yi[0]))[0]
+    if len(mask) == 0: return result
+    ix0 = mask[0]
+    y_interface = f(xi[ix0])
+    
+    if y_interface>yi[-1]:
+        iy0    = len(y)-1
+        dum    = fill_cells(x,y,yi,ix0,iy0,y_interface)
+        result = result.union(dum)
+    elif y_interface>yi[-2]:
+        ix0    = max(0,ix0-1)
+        iy0    = len(y)-1
+        dum    = fill_cells(x,y,yi,ix0,iy0,y_interface)
+        result = result.union(dum)
+        ix0   += 1
+    elif y_interface>yi[0]:
+        ix0 = max(0,ix0-1)
+        iy0 = np.searchsorted(yi,y_interface)-1
+        dum    = fill_cells(x,y,yi,ix0,iy0,y_interface)
+        result = result.union(dum)
+        ix0   += 1
+    else:
+        iy0 = 0
+        dum    = fill_cells(x,y,yi,ix0,iy0,y_interface)
+        result = result.union(dum)
+        
+    iy0    = dum[-1][-1]
+    dum    = fill_cells(x,y,yi,ix0,iy0,fx[ix0])
+    result = result.union(dum)
+    iy0    = dum[-1][-1]
+    
+    while ix0<=mask[-1]:
+        #
+        # evaluate function at next interface
+        #
+        y_interface = f(xi[ix0+1])
+        #
+        # fill until interface value is reached
+        #
+        dum    = fill_cells(x,y,yi,ix0,iy0,y_interface)
+        result = result.union(set(dum))
+        #
+        # go right
+        #
+        ix0 += 1  # update 1
+        iy0  = dum[-1][-1]
+        if ix0>mask[-1]: break
+        #
+        # fill until final value is reached
+        #
+        dum    = fill_cells(x,y,yi,ix0,iy0,fx[ix0])
+        result = result.union(set(dum))
+        iy0    = dum[-1][-1] 
+    #
+    # transform into sorted list
+    #
+    result=[list(i) for i in list(result)]
+    result.sort()
+    return result
