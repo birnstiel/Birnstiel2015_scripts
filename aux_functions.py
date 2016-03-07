@@ -16,6 +16,7 @@ Grav         = sc.G*1e3;                # gravitational constant in cm^3 g^-1 s^
 year         = sc.Julian_year;          # year in s
 sig_h2       = 2e-15;                   # cross section of H2 [cm^2]
 PC           = sc.parsec*1e2;           # parsec in cm
+M_sun        = 1.9891e+33;              # mass of the sun in g
 
 def dlydlx(x,R):
     """
