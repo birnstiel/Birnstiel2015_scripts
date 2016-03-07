@@ -233,7 +233,7 @@ def reconstruct_size_distribution(r,a,t,sig_g,sig_d,alpha,rho_s,T,M_star,v_f,a_0
         d[np.isnan(d)] = (p-q+0.5)[np.isnan(d)]
         v      = v0[ir]*(r/ra)**d[ir]
         pd_est = 1./(2*alpha)*(v/cs*vk/cs-2*p*alpha+vk/cs*np.sqrt(   (v/cs)**2+4*(1+d-p)*v/vk*alpha+4*alpha*sig_d/sig_g  ))
-        if fix_pd is not None: pd_est = fix_pd*np*np.ones(n_r)
+        if fix_pd is not None: pd_est = fix_pd*np.ones(n_r)
         #
         # now decide where to apply the solution: inward or outward
         #
