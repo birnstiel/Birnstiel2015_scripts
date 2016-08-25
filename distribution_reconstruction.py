@@ -2,7 +2,7 @@
 import matplotlib.pyplot as plt
 print('New implementation')
 
-def reconstruct_size_distribution(r,a,t,sig_g,sig_d,alpha,rho_s,T,M_star,v_f,a_0=1e-4,fix_pd=None,ir_0=2):
+def reconstruct_size_distribution(r,a,t,sig_g,sig_d,alpha,rho_s,T,M_star,v_f,a_0=1e-4,fix_pd=None,ir_0=2,return_a=False):
     """
     Reconstructs the approximate size distribution based on the recipe of Birnstiel et al. 2015, ApJ.
     
@@ -49,9 +49,13 @@ def reconstruct_size_distribution(r,a,t,sig_g,sig_d,alpha,rho_s,T,M_star,v_f,a_0
     :    float: set the inward diffusion slope to this values
          None:  calculate it
          
+    return_a : bool
+        If True, then in addition to the default output, also the 
+        three size limits: drift, fragmentation, growth timescale
+         
     Output:
     -------
-    sig_sol,a_max,r_f,sig_1,sig_2,sig_3
+    sig_sol,a_max,r_f,sig_1,sig_2,sig_3,[a_dr,a_fr,a_grow]
     
     sig_sol : array
     :    2D grain size distribution on grid r x a
@@ -376,8 +380,10 @@ def reconstruct_size_distribution(r,a,t,sig_g,sig_d,alpha,rho_s,T,M_star,v_f,a_0
             #
             sig_s[ia,ir] = np.trapz(2*pi*r[ir0:ir1+1]*(kernel*sig_dr[ia0:ia1+1,ir0:ir1+1]).sum(0),x=r[ir0:ir1+1])
         
-    
-    return sig_s,a_max,r[frag_idx[-1]],sig_1,sig_2,sig_3   
+    if return_a:
+        return sig_s,a_max,r[frag_idx[-1]],sig_1,sig_2,sig_3,a_dr,a_fr,a_grow
+    else:
+        return sig_s,a_max,r[frag_idx[-1]],sig_1,sig_2,sig_3   
         
 def test_reconstruction():
     import numpy as np
