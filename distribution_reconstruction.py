@@ -379,7 +379,7 @@ def reconstruct_size_distribution(r,a,t,sig_g,sig_d,alpha,rho_s,T,M_star,v_f,a_0
             # apply the smoothing
             #
             sig_s[ia,ir] = np.trapz(2*pi*r[ir0:ir1+1]*(kernel*sig_dr[ia0:ia1+1,ir0:ir1+1]).sum(0),x=r[ir0:ir1+1])
-        
+    if len(frag_idx)==0:frag_idx=[0]    
     if return_a:
         return sig_s,a_max,r[frag_idx[-1]],sig_1,sig_2,sig_3,a_dr,a_fr,a_grow
     else:
