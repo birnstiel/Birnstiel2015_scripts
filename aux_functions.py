@@ -112,6 +112,7 @@ def get_image_data(filename):
     #
     # open fits file and define x and y in arcsec
     #
+    from astropy.io import fits
     f = fits.open(filename)
     h = f[0].header
     if h['CUNIT1']!='deg' or h['CUNIT2']!='deg' \
@@ -437,7 +438,7 @@ def readimage(ext=None,filename=None):
     #
     iformat = fromfile(funit,dtype='int',count=1,sep=' ')[0]
     if iformat < 1 or iformat > 4:
-        raise NameError('ERROR: File format of '+file+' not recognized.')
+        raise NameError('ERROR: File format of '+filename+' not recognized.')
     if iformat == 1 or iformat == 3:
         radian = False
     else:
