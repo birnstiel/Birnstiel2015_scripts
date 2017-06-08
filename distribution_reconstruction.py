@@ -315,7 +315,11 @@ def reconstruct_size_distribution(r,a,t,sig_g,sig_d,alpha,rho_s,T,M_star,v_f,a_0
         pwl  = np.log(sig_3[imax,ir]/sig_3[i_full,ir])/np.log(a[imax]/a[i_full])
         if imax == i_full:
             imax = np.where(sig_3[:,ir]>floor)[0][-1]
-            pwl  = np.log(sig_3[imax,ir]/sig_3[i_full,ir])/np.log(a[imax]/a[i_full])
+            if imax == i_full:
+                # if it is still the same, we will just take a steep power-law
+                pwl = -3
+            else:
+                pwl  = np.log(sig_3[imax,ir]/sig_3[i_full,ir])/np.log(a[imax]/a[i_full])
         sig_3[:i_full,ir] = sig_3[i_full,ir]*(a[:i_full]/a[i_full])**pwl
     #
     # Now the problem is how to stitch the 3 distributions together,
